@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三级菜单练习</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .menu {
+      display: flex;
+      gap: 20px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      border: 1px solid #ccc;
+      width: 150px;
+      min-height: 200px;
+    }
+    li {
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+    li:hover {
+      background-color: #f0f0f0;
+    }
+    .active {
+      background-color: #b9d77b;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+    <!-- 菜单骨架
+     ul
+        li 菜单项1
+        li 菜单项2
+        li 菜单项3
+     ul -->
+  <h2>三级菜单案例（省 → 市 → 区）</h2>
+  <div class="menu">
+    <ul id="province"></ul>
+    <ul id="city"></ul>
+    <ul id="area"></ul>
+  </div>
+
+  <script>
+    // 模拟菜单数据
+    const data = {
+      '浙江省': {
+        '杭州市': ['西湖区', '拱墅区', '上城区'],
+        '宁波市': ['鄞州区', '江北区', '海曙区']
+      },
+      '江苏省': {
+        '南京市': ['鼓楼区', '玄武区', '秦淮区'],
+        '苏州市': ['吴中区', '昆山市', '姑苏区']
+      },
+      '广东省': {
+        '广州市': ['天河区', '白云区', '海珠区'],
+        '深圳市': ['南山区', '福田区', '宝安区']
+      }
+    };
+
+    // console.log(data['广东省'])
+    const provinceUl = document.getElementById('province');
+    const cityUl = document.getElementById('city');
+    const areaUl = document.getElementById('area');
+
+    //重置选中高亮
+    function resetActive(ul) {
+        [...ul.children].forEach(li => li.classList.remove('active'));
+    }
+
+    //加载省
+    for(let p in data) {
+        const li = document.createElement('li');
+        li.textContent = p;
+        li.addEventListener('click',() => {selectProvince(p,li)});
+        provinceUl.appendChild(li);
+    }
+
+    //选择省 p:省名 li:省的li标签
+    //逻辑：点击后重置高亮，重置下拉菜单
+    function selectProvince(p,li) {
+        resetActive(provinceUl);//点击后重置高亮
+        li.classList.add('active');
+
+        //清空下级菜单
+        cityUl.innerHTML = '';
+        areaUl.innerHTML = '';
+
+        //生成城市列表
+        for(let c in data[p]) {
+            const cityLi = document.createElement('li');
+            cityLi.textContent = c;
+            cityLi.addEventListener('click',()=>selectCity(p,c,cityLi));
+            cityUl.appendChild(cityLi);
+        }
+    }
+
+    //选择城市 p:省名 c:城市名 li:城市的li标签
+    function selectCity(p,c,li) {
+        resetActive(cityUl);
+        li.classList.add('active');
+
+        areaUl.innerHTML = '';
+
+        //生成区县列表
+        data[p][c].forEach(a =>{
+            const areaLi = document.createElement('li');
+            areaLi.textContent = a;
+            areaLi.addEventListener('click',()=>selectArea(a,areaLi));
+            areaUl.appendChild(areaLi);
+        });
+    }
+
+    // 4️⃣ 选择区
+    function selectArea(area, li) {
+      resetActive(areaUl);
+      li.classList.add('active');
+      alert(`你选择了：${li.textContent}`);
+    }
+
+  </script>
+</body>
+</html>

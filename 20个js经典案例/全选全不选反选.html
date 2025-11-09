@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="">
+        <p><input type="checkbox" id="">熊大</p>
+        <p><input type="checkbox" id="">熊二</p>
+        <p><input type="checkbox" id="">光头强</p>
+        <p><input type="checkbox" id="">吉吉</p>
+        <p><input type="checkbox" id="">毛毛</p>
+        <!-- button点击后会触发表单提交，刷新页面，要加上type="button"防止默认行为 -->
+        <button type="button">全选</button>
+        <button type="button">全不选</button>
+        <button type="button">反选</button>
+    </form>
+    <script>
+        //选中的三个表现形式，user click，标签添加checked。js中checked=true
+        const selects = [...document.querySelectorAll('input[type="checkbox"]')];
+        const allBtn = [...document.querySelectorAll('button')];
+
+        allBtn[0].addEventListener('click',()=>{
+            selects.forEach((select,index) => {
+                select.checked = true;
+            })
+        });
+
+        allBtn[1].addEventListener('click',()=>{
+            selects.forEach((select,index) => {
+                select.checked = false;
+            })
+        });
+
+        allBtn[2].addEventListener('click',()=>{
+            selects.forEach((select,index) => {
+                select.checked = !select.checked;
+            })
+        });
+
+    </script>
+</body>
+
+</html>

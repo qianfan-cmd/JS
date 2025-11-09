@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片展示</title>
+  <style>
+    /* ✅ 最外层容器自动包裹内容 */
+    .container {
+      display: inline-block; /* 自动根据内容大小调整宽高 */
+      border: 1px solid #ddd;
+      /* padding: 10px; */
+    }
+
+    /* ✅ 大图容器 */
+    .mainArea {
+      /* display:inline-block; */
+      width: fit-content; /* 跟随图片宽度变化 */
+      margin: 0 auto;
+    }
+
+    .mainArea img {
+      width: 100%; /* 你可以换成百分比或者自动适配 */
+      height: auto; /* 保持比例 */
+      /* min-height:400px; */
+      display: block;
+    }
+
+    /* ✅ 底部缩略图容器 */
+    .rowimg {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap; /* 让小图自动换行 */
+      gap: 8px; /* 小图之间间距 */
+      width: 100%; /* 跟随大图宽度 */
+      box-sizing: border-box;
+      margin-top: 10px;
+    }
+
+    .rowimg img {
+      width: 30%;  /* 每行最多放4张图（可调） */
+      height: auto;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.3s;
+    }
+
+    .rowimg img:hover {
+      border-color: #f0a500; /* hover 时高亮 */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="mainArea">
+      <img id="imgShow" src="./img/霸道总裁爱上前端开发的我.jpg" alt="主图">
+    </div>
+    <div class="rowimg">
+      <img src="./img/霸道总裁爱上前端开发的我.jpg" alt="cat1">
+      <img src="./img/蔡的不敢吱声.jpg" alt="cat2">
+      <img src="./img/新年快乐.jpg" alt="cat3">
+    </div>
+  </div>
+
+  <script>
+    // ✅ 点击小图切换大图
+    const mainImg = document.getElementById('imgShow');
+    const thumbs = document.querySelectorAll('.rowimg img');
+
+    thumbs.forEach(thumb => {
+      thumb.addEventListener('mouseenter', () => {
+        mainImg.src = thumb.src;
+        mainImg.style.minHeight = mainImg.height+'px';
+      });
+    });
+  </script>
+</body>
+</html>

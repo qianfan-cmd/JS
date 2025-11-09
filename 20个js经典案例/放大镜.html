@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .home {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        margin-top: 50px;
+    }
+
+    .box {
+        width: 200px;
+        height: 200px;
+        background-color: rgba(193, 232, 17, 0.5);
+        position: absolute;
+        display: none;
+        pointer-events: none;
+        /* ✅ 不响应鼠标事件 
+        不写这句代码的话鼠标离开图片后box还会一直存在，因为浏览器会把box当作container的一部分*/
+        border-radius: 50%;
+        /* transition:all 0.3s ease-in-out; */
+    }
+
+    .container {
+        width: 600px;
+        height: 600px;
+        margin: 0 auto;
+        background-image: url('./img/新年快乐.jpg');
+        background-size: cover;
+        position: relative;
+    }
+
+    .show {
+        position: absolute;
+        border: 1px solid red;
+        width: 400px;
+        height: 400px;
+        right: 10px;
+        display: none;
+        background-repeat: no-repeat;
+        /*决定了背景图片是否以及如何重复显示
+        保证背景图片不会在水平或者垂直方向上重复显示*/
+        background-size: 1800px 1800px;
+        /*放大三倍，设置背景图片大学*/
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        /*初始可见度为0，0表示完全透明*/
+        /* transition: all 0.3s ease; 有这句代码会延迟显示*/
+        transform: scale(0.8);
+        /*把元素大小缩放到原来的0.8倍*/
+    }
+
+    .show.active {
+        opacity: 1;
+        transform: scale(1);
+        /*把元素大小恢复到1倍*/
+    }
+</style>
+
+<body>
+
+    <div class="home">
+
+        <div class="container">
+            <div class="box"></div>
+        </div>
+        <div class="show"></div>
+    </div>
+    <script>
+        let box = document.querySelector('.box');
+        let container = document.querySelector('.container');
+        let show = document.querySelector('.show');
+
+        let scale = 3; //放大倍数
+        const boxWidth = box.clientWidth;
+        const boxHeight = box.clientHeight;
+
+        //设置show的背景图片为放大图片
+        show.style.backgroundImage = `url('./img/新年快乐.jpg')`;
+
+        container.addEventListener('mousemove', (e) => {
+            let event = e || window.event;
+            console.log(event);
+            //event.clientX 是鼠标相对于页面的坐标
+            //所以要先获取到container的位置，然后计算出鼠标相对于container的坐标
+            let containerRect = container.getBoundingClientRect();
+            let x = event.clientX - containerRect.left;
+            let y = event.clientY - containerRect.top;
+
+            box.style.left = x - box.clientWidth / 2 + 'px';
+            box.style.top = y - box.clientHeight / 2 + 'px';
+
+            // 设置放大图显示位置
+            /*background-position决定的是背景图片相对于显示区域的位置
+            现在的情况是show显示的是原图的三倍大小，我们希望放大区的中心
+            对应鼠标的位置。
+            background-positon可以看做是背景图片在移动的偏移量*/
+            const bgX = -((x * scale) - show.offsetWidth / 2);
+            const bgY = -((y * scale) - show.offsetHeight / 2);
+            show.style.backgroundPosition = `${bgX}px ${bgY}px`;
+        });
+
+        container.addEventListener('mouseenter', () => {
+            box.style.display = 'block';
+            show.style.display = 'block';
+            show.classList.add('active');
+        });
+
+        container.addEventListener('mouseleave', () => {
+            box.style.display = 'none';
+            show.style.display = 'none';
+        });
+    </script>
+</body>
+
+</html>

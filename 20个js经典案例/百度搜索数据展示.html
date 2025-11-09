@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能搜索框</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+        }
+        body{
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            height: 100vh;
+            background:linear-gradient(135deg,#6a5ce7 0%,#4ead13 100%);
+        }
+        .container{
+            max-width:500px;
+            background-color: #f7f7f7;
+            width:100%;
+            border-radius:15px;
+            padding:30px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .title{
+            margin-bottom:10px;
+        }
+        .search-box{
+            position:relative;
+            margin-bottom:20px;
+            display:flex;
+            gap:10px;
+            justify-content:space-between;
+        }
+        .search-input{
+            border-radius:8px;
+            width:73%;
+            padding-left:10px;
+            font-size:16px;
+            border:2px solid #ddd;
+            transition:border-color 0.3s;
+        }
+        .search-input:focus{
+            outline:none;
+            border-color:#6a5ce7;
+            box-shadow: 0 0 0 3px rgba(106, 92, 231, 0.2);
+        }
+        .search-button{
+            background:#6a5ce7;
+            color:white;
+            border:none;
+            border-radius:10px;
+            padding:5px 25px;
+            font-size:16px;
+            font-weight:600px;
+            cursor:pointer;
+            transition:all 0.3s;
+        }
+        .search-button:hover{
+            background:#4ead13;
+            transform: translateY(-2px);
+        }
+
+        .dropdown{
+            display: none;
+            width: 73%;
+            max-height:300px;
+            overflow-y:auto;
+            background-color: white;
+            position:absolute;
+            top: 100%; /* 修复：下拉框出现在输入框下方 */
+            left: 0;   /* 修复：左对齐 */
+            right:0;
+            z-index:10;
+            border:2px solid #6a5ce7;
+            border-radius: 0 0 8px 8px; /* 修复：只底部有圆角 */
+            border-top: none; /* 修复：去掉顶部边框 */
+        }
+        .dropdown-item{
+            cursor:pointer;
+            padding:12px 25px;
+            transition:all 0.3s;
+            border-bottom:1px solid #eee;
+        }
+        .dropdown-item:last-child{
+            border-bottom:none;
+        }
+        .dropdown-item:hover{
+            background-color:#ffeb3b;
+        }
+        .instructions {
+            background: #f8f9fa;
+            border-left: 4px solid #6a5ce7;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+        }
+        .instructions h3 {
+            color: #6a5ce7;
+            margin-bottom: 10px;
+        }
+        .instructions ul {
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">智能搜索框</h1>
+        <div class="search-box">
+            <input type="text" id="search-input" class="search-input"
+            placeholder="请输入搜索内容" autocomplete="off"/>
+            <button class="search-button">搜索</button>
+            <div class="dropdown" id="dropdown"></div>
+        </div>
+        <div class="instructions">
+            <h3>使用说明</h3>
+            <ul>
+                <li>输入关键词实时显示匹配结果</li>
+                <li>点击结果项或按Enter键选择</li>
+                <li>按↑↓键在结果间导航</li>
+                <li>按Esc键关闭下拉框</li>
+                <li>点击外部区域关闭下拉框</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+      let arr = ["🐻哥的裸照","🐻哥的小丑瞬间","山顶洞人照片","鸡大的秘密","猜谜语-叫妈妈-打一游戏"];
+      let input = document.getElementById("search-input");
+      let dropdown = document.getElementById("dropdown");
+      let btn = document.querySelector(".search-button");
+      
+      // 添加变量跟踪当前选中的项
+      let selectedIndex = -1;
+      
+      const showResult = (str) => {
+          dropdown.innerHTML = '';
+          selectedIndex = -1; // 重置选中索引
+          
+          if(!str){
+             dropdown.style.display = 'none';
+             return;
+          }
+          
+          const results = arr.filter(item => item.toLowerCase().includes(str.toLowerCase()));
+          
+          if(!results.length){
+            dropdown.innerHTML = '<div class="dropdown-item">没有找到匹配的结果<div>';
+            dropdown.style.display = 'block';
+            return;
+          }else{
+            results.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('dropdown-item');
+                
+                // 添加高亮功能
+                const highlightedText = item.replace(
+                    new RegExp(str, 'gi'), 
+                    '<span style="background-color: yellow; font-weight: bold;">$&</span>'
+                );
+                div.innerHTML = highlightedText;
+                
+                div.addEventListener('click',()=>{
+                    input.value = item;
+                    dropdown.style.display = 'none';
+                    selectedIndex = -1;
+                    startSearch();
+                });
+                
+                dropdown.appendChild(div);
+            })
+            dropdown.style.display = 'block';
+          }
+      }
+      
+      const startSearch = () => {
+            const str = input.value.trim();
+            alert(`正在搜索${str}`);
+            console.log(str);
+      }
+      
+      input.addEventListener("input",()=>{
+          showResult(input.value);
+      })
+      
+      input.addEventListener("focus",()=>{
+        showResult(input.value);
+      })
+      
+      input.addEventListener("keydown",(e)=>{
+          const items = dropdown.querySelectorAll(".dropdown-item");
+
+          if(e.key === 'Enter'){
+            if(items.length > 0){
+                const selectedItem = selectedIndex >= 0 ? items[selectedIndex] : items[0];
+                input.value = selectedItem.textContent;
+            }
+            dropdown.style.display = 'none';
+            selectedIndex = -1;
+            startSearch();
+            return;
+          }
+          
+          if(e.key === 'Escape'){
+            dropdown.style.display = 'none';
+            selectedIndex = -1;
+            return;
+          }
+          
+          // 修复上下键导航
+          if((e.key === 'ArrowDown' || e.key === 'ArrowUp') && items.length > 0){
+            e.preventDefault();
+            
+            if(e.key === 'ArrowDown'){
+                selectedIndex = (selectedIndex + 1) % items.length;
+            } else {
+                selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+            }
+            
+            // 更新选中样式
+            items.forEach((item, index) => {
+                if(index === selectedIndex) {
+                    item.style.backgroundColor = '#e0e0e0';
+                } else {
+                    item.style.backgroundColor = '';
+                }
+            });
+          }
+      })
+      
+      btn.addEventListener("click",()=>{startSearch()});
+      
+      document.addEventListener('click',(e)=>{
+          if(!input.contains(e.target)&&!dropdown.contains(e.target)){
+            dropdown.style.display = 'none';
+            selectedIndex = -1;
+          }
+      });
+    </script>
+</body>
+</html>

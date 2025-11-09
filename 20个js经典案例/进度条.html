@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    .progress-container {
+        /* display:flex;
+        justify-content:center;
+        align-items:center; */
+        border:1px solid #ccc;
+        width:400px;
+        height:30px;
+        background-color: #eee;
+        border-radius:15px;
+        margin:20px auto;
+        position:relative;
+        overflow:hidden;
+    }
+    .progress-bar {
+        height:100%;
+        width:0%;
+        background-color:#4CAF50;
+        text-align:center;/*进度条100%时文字居中*/
+        transition:width 0.1s linear;
+        border-radius: 15px 0 0 15px;
+        line-height:30px;/*文字垂直居中*/
+        color:blue;
+        text-align:center;
+        font-weight:bold;/*文字加粗*/
+    }
+    #Btn {
+        cursor:pointer;
+        padding:10px 20px;
+        font-size:16px;
+    }
+</style>
+<body>
+    <!-- 进度条外部 -->
+    <div class="progress-container">
+        <!-- 内部进度条（显示进度） -->
+        <div class="progress-bar" id="progressBar">0%</div>
+    </div>
+
+    <button id="Btn">开始安装</button>
+    <script>
+     const progressBar = document.getElementById('progressBar');
+     const btn = document.getElementById('Btn');
+
+     let progress = 0;
+     let timer = 0;//定时器
+     btn.addEventListener('click',()=>{
+           if(timer)return;//定时器不为空表示已经在运行
+
+           progress = 0;
+           progressBar.style.width = '0%';
+           progressBar.textContent = '0%';
+
+           timer = setInterval(()=>{//每隔50ms执行一次
+               if(progress >= 100) {
+                clearInterval(timer);
+                timer = null;
+                progressBar.textContent = '安装完成';
+                return;
+               }
+
+               progress += 1;
+               progressBar.style.width = progress + '%';
+               progressBar.textContent = progress + '%';
+           },30);
+     });
+    </script>
+</body>
+</html>

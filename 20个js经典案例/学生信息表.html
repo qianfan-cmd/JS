@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        fieldset {
+            padding: 10px 10px;
+        }
+
+        .stuTable {
+            width: 100%;
+            border-collapse: collapse;
+            border: #333 1px solid;
+            font-family: Arial, sans-serif;
+        }
+
+        .stuTable th,
+        .stuTable td {
+            border: #333 1px solid;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stuTable th {
+            background-color: #b9d77b;
+            font-weight: bold;
+        }
+
+        .delete {
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <fieldset>
+        <legend>学生录入系统</legend>
+        <label for="name">姓名：</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="age">年龄：</label>
+        <input type="text" id="age" name="age" required><br>
+        <label for="sex">性别：</label>
+        <input type="radio" id="male" name="sex" value="男" checked>
+        <label for="male">男</label>
+        <input type="radio" id="female" name="sex" value="女">
+        <label for="female">女</label><br>
+
+        <label for="number">手机：</label>
+        <input type="text" id="number" name="number" required><br>
+        <input type="submit" value="确认提交">
+    </fieldset>
+
+    <table class="stuTable">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>手机</th>
+                <th>删除</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>张三</td>
+                <td>18</td>
+                <td>男</td>
+                <td>13812345678</td>
+                <td class="delete">删除</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        //逻辑：添加信息并展示，删除信息
+        //把数据push到数组中，对数组进行遍历（对tr的循环，拼接之后赋值给tbody）
+        let sex = document.querySelector('input[name="sex"]:checked');
+        let input = document.querySelectorAll('input[type="text"]');
+        let btn = document.querySelector('input[type="submit"]');
+        let tbody = document.querySelector('tbody');
+
+        //[{name: '张三', age: '18', sex: '男', number: '13812345678'}]
+        let stuArr = [];
+
+        btn.addEventListener('click',()=>{
+            let obj = {id:Date.now(),name: input[0].value,age:input[1].value,sex:sex.value,number:input[2].value};
+            stuArr.push(obj);
+            console.log(stuArr);
+            let tr = '';
+            //遍历数组
+            stuArr.forEach((item,index)=>{
+                
+                tr += `<tr id=${item.id}>`+
+                `<td>${item.name}</td>` +
+                `<td>${item.age}</td>` +
+                `<td>${item.sex}</td>` +
+                `<td>${item.number}</td>` +
+                `<td class="delete" onclick="deleteStu(${item.id})">删除</td>` +
+            '</tr>'
+            })
+            tbody.innerHTML = tr;
+            input[0].value='';
+            input[1].value='';
+            input[2].value='';
+        });
+
+        function deleteStu(id){
+             stuArr = stuArr.filter(item=>item.id!=id)
+             let res = document.getElementById(id);
+             tbody.removeChild(res);
+        }
+
+    </script>
+</body>
+
+</html>

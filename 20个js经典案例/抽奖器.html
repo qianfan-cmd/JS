@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #fa {
+            width:600px;
+            height:600px;
+            border:1px solid red;
+        }
+        .option {
+            width:33%;
+            height:33%;
+            border:1px solid red;
+            float:left;
+            text-align:center;
+            line-height:200px;/*一行文字所在行的上下间距*/
+            font-weight:bold;
+            font-size:30px;
+        }
+        #start {
+                        width:33%;
+            height:33%;
+            border:1px solid red;
+            float:left;
+            text-align:center;
+            line-height:200px;/*一行文字所在行的上下间距*/
+            font-weight:bold;
+            font-size:30px;
+             background-color: pink;
+             cursor:pointer;
+        }
+        #start:hover {
+             background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="fa">
+        <div class="option">塔寺町</div>
+        <div class="option">三明治</div>
+        <div class="option">卤肉饭</div>
+        <div class="option">喘息鸡排</div>
+        <div  id="start">开始抽奖</div>
+        <div class="option">牢上海</div>
+        <div class="option">香菇肉饼</div>
+        <div class="option">福鼎肉片</div>
+        <div class="option">片皮鸭</div>
+    </div>
+
+    <script>
+    //定时器内部用随机数来获取奖品元素，设置时间点，达到时间点停止定时器
+    let start = document.getElementById('start');
+    let options = document.querySelectorAll('.option');
+    let timer = null;
+
+    start.addEventListener('click',()=>{
+        let num = 0;
+        let result;
+        if(timer===null){
+            timer = setInterval(()=>{
+            num++;
+            //随机0-7选中元素
+            let i = Math.floor(Math.random()*options.length);
+            console.log(i);
+            //把所有元素恢复原样
+            for(let j=0;j<options.length;j++) {
+                options[j].style.backgroundColor = "";
+            }
+            options[i].style.backgroundColor = "yellow";
+
+            //停止定时器
+            if(num === 30) {
+                result = options[i].innerHTML;
+                console.log(result);    
+                clearInterval(timer);   
+                timer = null;
+                setTimeout(()=>{alert(`抽奖结果：${result}`);},1000);
+                
+            }
+        },100);      
+        }
+        
+    })
+
+    </script>
+</body>
+</html>

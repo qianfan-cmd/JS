@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微博热点Top10</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        h2 {
+            display: flex;
+            align-items: center;
+            margin-left: 38px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            background-color: aqua;
+            margin-left: 50px;
+            padding: 5px 10px;
+        }
+
+        button:hover {
+            background-color: #008CBA;
+            color: white;
+            cursor: pointer;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        a {
+            margin-right: 20px;
+            color: black;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #008CBA;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>微博热点Top10<button id="btn">换一换</button></h2>
+    <ul id="hotList"></ul>
+
+    <script>
+        // 获取按钮元素
+        const btn = document.getElementById('btn');
+        // 获取ul元素
+        const ul = document.getElementById('hotList');
+        // 定义一个空数组来存储热点数据
+        let hotData = [];
+        // 1️⃣ 加载JSON数据
+        async function loadData() {
+            try {
+                // 使用fetch API从指定路径加载JSON数据 返回一个promise对象，解析成一个Response对象，再将Response对象转换为JSON格式
+                //fetch(url)fetch是一种发起网络请求的方式，用于从服务器获取资源
+                const response = await fetch('./top.json'); // 读取同目录下的 hot.json
+                // 将响应转换为JSON格式
+                hotData = await response.json(); // 将JSON数据存储到hotData变量中
+                // 按热度从大到小排序
+                hotData.sort((a, b) => b.hot - a.hot); // 使用sort方法按热度排序
+                // 渲染到页面
+                renderList(hotData); // 调用renderList函数将排序后的数据渲染到页面
+            } catch (err) {
+                // 如果加载或转换数据过程中出现错误，打印错误信息到控制台
+                console.error('加载数据失败:', err); // 错误处理
+            }
+        }
+        // 2️⃣ 渲染到页面
+        function renderList(data) {
+            // 清空ul元素的内容
+            ul.innerHTML = ''; // 将ul的内容置为空
+            // 遍历数据数组中的每个元素
+            data.forEach(item => {
+                // 创建一个新的li元素
+                const li = document.createElement('li');
+                // 设置li元素的内容，包括链接和热度
+                li.innerHTML = `<a href="${item.url}" target="_blank">${item.title}</a><span>${item.hot}</span>`;
+                // 将新创建的li元素添加到ul元素中
+                ul.appendChild(li);
+            });
+        }
+        // 3️⃣ 点击“换一换”随机打乱
+        btn.addEventListener('click', () => {
+            // 使用洗牌算法（Fisher-Yates Shuffle）随机打乱数组
+            const shuffled = [...hotData].sort(() => Math.random() - 0.5); // 复制数组并随机排序
+            // 渲染到页面
+            renderList(shuffled); // 调用renderList函数将随机排序后的数据渲染到页面
+        });
+        // 页面加载时执行
+        loadData(); // 调用loadData函数在页面加载时加载数据
+    </script>
+</body>
+
+</html>

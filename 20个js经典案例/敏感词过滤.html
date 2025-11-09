@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        }
+        .comment{
+            display: block;
+            width: 50%;
+            height: 30px;
+            margin-bottom: 10px;
+        }
+        #res{
+            width:50%;
+            height:50px;
+            display: flex;
+            flex-wrap:wrap;
+            margin-bottom:10px;
+            border:#333 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>敏感词过滤</h1>
+        <textarea name="comment" id="comment" 
+        class="comment"
+        placeholder="输入你要发布的评论"></textarea>
+        <button id="submit">发布</button>
+        <p id="res"></p>
+    </div>
+    <script>
+        //逻辑：输入的值和正则匹配到了，就用*替换(
+        let comment = document.getElementById('comment');
+        let submit = document.getElementById('submit');
+        let res = document.getElementById('res');
+        let sensitive = ['妈的','牛魔','司马','朝鲜'];
+        submit.addEventListener('click',()=>{
+            let str = comment.value;
+            let newStr = str.replace(/(妈的|牛魔|司马|朝鲜)/g,function(match){
+                return match.replace(/./g,'*');
+            });
+            res.innerHTML = newStr;
+            comment.value = '';
+            console.log(newStr);
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .info {
+            background-color: #e8e5e5;
+            width: 200px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;/*子元素从上到下排列*/
+            padding: 20px;
+
+        }
+
+        .info p {
+            margin: 8px 0; /* 给段落添加间距 */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* 按钮分布在两端 */
+            margin-top: 20px; /* 与上面内容保持距离 */
+        }
+
+        .button-container button {
+            width: 80px; /* 调整按钮宽度 */
+            height: 30px;
+            border: 1px solid #333; /* 添加边框 */
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #e0e0e0; /* 悬停效果 */
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <p>商品信息：web前端课程</p>
+        <p>原价：1980元</p>
+        <p>现价：1.98元</p>
+        <p>内容：HTML,CSS,JS</p>
+        <p>地址：广东省广州市</p>
+        
+        <!-- 添加按钮容器 -->
+        <div class="button-container">
+            <button>取消</button>
+            <button>支付</button>
+        </div>
+    </div>
+    <script>
+        //点击支付出现确认框
+        const btn = document.getElementsByTagName('button')[1];
+        btn.addEventListener('click',()=>{
+            //console.log('支付成功');
+            let res = window.confirm('确认支付吗？');
+            if(res){
+                location.href = './success.html'
+            }
+        })
+    </script>
+</body>
+</html>

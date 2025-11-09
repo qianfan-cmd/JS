@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>验证码验证示例</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body{
+            background:linear-gradient(135deg,#6010ea 0%,#13e539 100%);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            padding:20px;
+        }
+        .container{
+            background-color:white;
+            border-radius:15px;
+            /* 水平阴影 垂直阴影 阴影半径 阴影颜色 */
+            box-shadow:10px 10px 20px rgba(0,0,0,0.3);
+            padding:30px;
+            width:100%;
+            max-width:450px;
+        }
+        h1{
+            text-align:center;
+            margin-bottom:20px;
+            color:#181bb5;
+            font-weight:600px;
+        }
+        .v_code{
+            display:flex;
+            flex-direction:column;
+            gap:20px;
+        }
+        .code_show{
+           display:flex;
+            justify-content:space-between;
+            align-items:center;
+            background-color: #f5f5f5;
+            border:#6010ea solid 2px;
+            border-radius:10px;
+            padding:15px;
+        }
+        #linkbt{
+            color:#6010ea;
+            text-decoration:none;
+            cursor:pointer;
+            font-weight:500;
+        }
+        #linkbt:hover{
+            text-decoration: underline;
+        }
+        .code_input{
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+        }
+        label{
+            font-weight:500;
+            color:#555;
+            gap:10px;
+        }
+        input[type="text"]{
+            padding:12px 15px;
+            border-radius:10px;
+            border:#6010ea solid 2px;
+            font-size:16px;
+            transition:border-color 0.3s ;
+        }
+        input[type="text"]:focus{
+            border-color:#1ee30c;
+            outline:none;
+            box-shadow:0 0 0 3px rgba(218, 232, 23, 0.3);
+        }
+        label:hover+input[type="text"]{
+            border-color:#aaa;
+        }
+        .code{
+            background-color: #dcd5d5;
+            width: 65px;
+        }
+        #text_show{
+            margin-top:5px;
+            font-size:16px;
+            min-height: 20px;
+            
+        }
+        #Button1{
+            background:linear-gradient(90deg,#6010ea 0%,#13e539 100%);
+            border-radius: 10px;
+            color:white;
+            width:100%;
+            border:none;
+            padding:12px;
+            font-size:16px;
+            font-weight: 500;
+            cursor:pointer;
+            transition:background 0.3s;
+        }
+        #Button1:hover{
+            background:linear-gradient(90deg,#13e539 0%,#6010ea 100%);
+            color:rgb(7, 231, 104);
+        }
+        .tips{
+            background:#f8f9fa;
+            border-left:4px solid #6010ea;
+            padding:15px;
+            margin-top:25px;
+            border-radius:0 8px 8px 0;
+        }
+        .tips h3{
+            /* font-weight:500; */
+            color:#6010ea;
+            margin-bottom:10px;
+        }
+        .tips p{
+            color:#666;
+            line-height:1.5;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>验证码验证</h1>
+        <div class="v_code">
+            <div class="code_show">
+                <span class="code" id="checkCode"><i><strong>ADF34Y</strong></l></span>
+                <a id="linkbt">换一张</a>
+            </div>
+            <div class="code_input">
+                <label for="inputCode">请输入验证码：</label>
+                <input type="text" id="inputCode" placeholder="请输入上方验证码"/>
+                <span id="text_show"></span><!--显示提示信息-->
+            </div>
+            <input id="Button1" type="button" value="确定"/>
+        </div>
+        <div class="tips">
+            <h3>label标签和for属性说明</h3>
+            <p><strong>label标签</strong>用于为表单元素提供标签文本。</p>
+            <p><strong>for属性</strong>通过匹配表单元素的id，将label与特定表单控件关联起来。点击label可以选择对应的表单元素</p>
+            <p><strong>作用</strong>：点击"请输入验证码"文字时，输入框会自动获得焦点，提高用户体验和可访问性。</p>
+
+        </div>
+    </div>
+    <script>
+        //验证逻辑
+        document.getElementById("Button1").addEventListener("click",
+            () => {
+                let inputCode = document.getElementById("inputCode").value.toUpperCase();
+                let checkCode = document.getElementById("checkCode").textContent.toUpperCase();
+                let textShow = document.getElementById("text_show");
+                if(inputCode === checkCode){
+                    // location.href = "https://github.com/qianyifan"
+                    console.log("验证码正确");
+                    textShow.innerText = "验证码正确";
+                    textShow.style.color = "green"; 
+                }else{
+                    textShow.innerText = "验证码错误！";
+                    textShow.style.color = "red"; 
+                }
+            }
+        )
+        //生成验证码
+        document.getElementById("linkbt").addEventListener("click",
+            () => {
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                let newCode = '';
+                //随机生成六位验证码
+                for(let i =0;i<6;i++){
+                    newCode += chars.charAt(Math.floor(Math.random()*chars.length));
+                    let codeText = document.getElementById("checkCode")
+                    .getElementsByTagName("strong")[0];
+                    codeText.innerText = newCode;
+                    document.getElementById("inputCode").value = "";
+                    document.getElementById("text_show").innerText = "";
+                }
+            })
+            
+    </script>
+</body>
+</html>

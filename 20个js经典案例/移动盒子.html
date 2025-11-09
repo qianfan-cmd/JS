@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            position:relative;
+            margin:0;
+            padding:0;
+            width:100%;
+        }
+        .box {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            position:absolute;
+        }
+        button {
+            position:relative;
+            top:240px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <button>点击开始</button>
+    <button>点击暂停</button>
+    <script>
+     const box = document.querySelector('.box');
+     const startBtn = document.querySelectorAll('button')[0];
+     const stopBtn = document.querySelectorAll('button')[1];
+     let progress = 0;
+     let timer = null;
+     let direction = 1;
+
+     startBtn.addEventListener('click',()=>{
+        if(timer) return;
+
+        progress = 0;
+        box.style.left = '0%';
+
+        timer = setInterval(()=>{
+            if(progress >= 100 && direction === 1) {
+                direction = -1;
+            } else if(progress <= 0 && direction === -1) {
+                direction = 1;
+            }
+            progress += direction;
+            box.style.left = progress + '%';
+        },30);
+     });
+
+     stopBtn.addEventListener('click',()=>{
+        if(timer) {
+            clearInterval(timer);
+            timer = null;
+        }
+     })
+    </script>
+</body>
+</html>

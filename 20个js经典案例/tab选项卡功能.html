@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{
+            width:200px;
+            height:200px;
+            display: none;
+        }
+        .container{
+            display: block;
+            padding:10px;
+        }
+        .tag{
+            display: block;
+            background-color: aqua;
+            height:30px;
+            width:fit-content;/*宽度随元素变化*/
+            cursor:pointer;
+            margin-bottom: 10px;
+            border:#333 solid 1px;
+            transition:0.3s;
+        }
+        .tag:hover{
+            background-color: #c9db2a;
+            transform:translateY(2px);
+        }
+        #showArea img{
+             width: 200px;
+             height: 200px;
+             display: none; /* 默认不显示 */
+             border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="tag">霸道总裁爱上前端开发的我</span>
+        <span class="tag">蔡的不敢吱声</span>
+        <span class="tag">新年快乐</span>
+    </div>
+    <div id="showArea">
+         <img id="previewImg" src="" alt="预览图片">
+    </div>
+    <script>
+        //map和forEach是数组用法，getElementsByClassName返回的是类数组对象
+        //用querySelectorAll可以返回一个NodeList对象，支持forEach
+        const tags = [...document.getElementsByClassName("tag")];
+        const previewImg = document.getElementById('previewImg');
+        const urlData = [
+            "./img/霸道总裁爱上前端开发的我.jpg",
+            "./img/蔡的不敢吱声.jpg",
+            "./img/新年快乐.jpg"
+        ];
+        tags.forEach((tag,index) => {
+            tag.addEventListener('mouseenter',()=>{
+                const imgSrc = urlData[index];
+                previewImg.src = imgSrc;
+                previewImg.style.display = "block";
+            });
+
+                tag.addEventListener('mouseleave',()=>{
+                    previewImg.style.display = "none";
+                });
+            });
+        
+    </script>
+</body>
+</html>

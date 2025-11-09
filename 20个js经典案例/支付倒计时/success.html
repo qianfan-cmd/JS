@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #computed{
+            font-size: 30px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>恭喜您，支付成功</h1>
+        <p id="computed">10</p>秒后自动返回首页
+        <button>返回首页</button>
+    </div>
+    <script>
+        let timer;
+        //加载页面时，应该触发定时器10s
+        window.onload = () => {
+           timer = setInterval(()=> {
+                let time = 10;
+                time--;
+                document.getElementById("computed").innerText = time;
+                if(time==0){
+                    clearInterval(timer);
+                    location.href = "index.html";
+                }
+            },1000);
+        
+        }
+        const btn = document.querySelector("button");
+        btn.addEventListener("click",()=>{
+            if(timer){
+            clearInterval(timer);
+            console.log("定时器已停止");
+            }
+            location.href = "index.html"
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>猫眼电影选座示例</title>
+  <style>
+    body {
+      font-family: 'Microsoft YaHei', sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .screen {
+      width: 300px;
+      height: 30px;
+      background: linear-gradient(to bottom, #ccc, #999);
+      text-align: center;
+      line-height: 30px;
+      color: #333;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(6, 40px);
+      gap: 10px;
+    }
+
+    .seat {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      background-color: #ccc;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      line-height: 40px;
+      font-size: 14px;
+      user-select: none;
+    }
+
+    .seat:hover {
+      background-color: #b0b0b0;
+    }
+
+    .seat.selected {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .seat.sold {
+      background-color: #e74c3c;
+      cursor: not-allowed;
+      color: white;
+    }
+
+    .info {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #ff4747;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #ff2727;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎬 猫眼电影选座系统</h1>
+
+  <div class="screen">银幕</div>
+
+  <!-- 用于存放座位的div -->
+  <div class="seats" id="seatArea"></div>
+
+  <div class="info" id="info">
+    已选座位：<span id="selectedSeats">无</span><br>
+    总价：<span id="totalPrice">0</span> 元
+  </div>
+
+  <button class="btn" id="confirmBtn">确认选座</button>
+
+  <script>
+    const seatArea = document.getElementById('seatArea');
+    // 座位数组
+    const selectedSeatsText = document.getElementById('selectedSeats');
+    const totalPriceText = document.getElementById('totalPrice');
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    const rows = 5;
+    const cols = 6;
+    const pricePerSeat = 45;
+
+    let selectedSeats = [];// 已选座位数组
+    const soldSeats = ['2-3', '3-2', '4-5'];//已售座位
+
+    //初始化座位
+    for(let row = 1; row <=rows; row++) {
+        for(let col = 1; col <= cols; col++) {
+            //用div来表示座位，给其添加属性，然后标记位置
+            //classList返回的是一个元素的类名列表，.add()方法可以给元素添加类名
+            //dataset属性可以用来存储自定义数据
+            const seat = document.createElement('div');
+            seat.classList.add('seat');
+            seat.dataset.seat = `${row}-${col}`;
+            seat.textContent = `${row}-${col}`;
+
+            if(soldSeats.includes(`${row}-${col}`)) {
+                seat.classList.add('sold');
+            }
+
+            seat.addEventListener('click',()=>{
+                if(seat.classList.contains('sold')) {
+                    //contains方法检查classList是否包含某个类名
+                    return;
+                }
+
+                //toggle方法的意思是如果包含该类名则删除，否则添加
+                seat.classList.toggle('selected');
+                const seatId = seat.dataset.seat;
+
+                if(seat.classList.contains('selected')) {
+                    selectedSeats.push(seatId);
+                } else {
+                    selectedSeats = selectedSeats.filter(s => s!== seatId);
+                }
+                updateInfo();
+            });
+
+            seatArea.appendChild(seat);
+        }
+    }
+
+    const updateInfo = () => {
+        selectedSeatsText.textContent = selectedSeats.length > 0 ? selectedSeats.join('，') : '无';
+        totalPriceText.textContent = selectedSeats.length * pricePerSreats;
+    }
+
+// 点击确认按钮
+    confirmBtn.addEventListener('click', () => {
+        console.log(selectedSeats.length);
+      if (selectedSeats.length === 0) {
+        alert('请先选择座位！');
+      } else {
+        alert(`您已成功选择座位：${selectedSeats.join(', ')}\n总价：${selectedSeats.length * pricePerSeat} 元`);
+      }
+    });
+     
+  </script>
+</body>
+</html>
